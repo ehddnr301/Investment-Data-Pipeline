@@ -16,7 +16,7 @@
     - [x] 금융투자(brokerage)
     - [x] 투신(investment)
     - [x] 개인(individual)
-- [ ] Dockerfile형태 제작
 - [ ] db 저장 (postgres)
-- [ ] docker-compose형태 제작
+- [ ] Dockerfile형태 제작
 - [ ] crontab 설정
+- [ ] docker-compose형태 제작
