@@ -11,7 +11,7 @@
 
 - [ ] pykrx 테스트
     - [x] ohlcv
-    - [ ] marketcap
+    - [x] marketcap
     - [ ] 외국인(foreigner)
     - [ ] 금융투자(brokerage)
     - [ ] 투신(investment)

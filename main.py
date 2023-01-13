@@ -25,6 +25,13 @@ def get_ohlcv(basedate, ticker_list):
     return df
 
 
+def get_marketcap(basedate, ticker_list):
+    df = stock.get_market_cap(basedate)
+    df = df.filter(items=ticker_list, axis=0)
+    df = df.reset_index()
+    return df
+
+
 if __name__ == "__main__":
     BASEDATE = str((datetime.today() + timedelta(hours=9)).date())
     TARGET_NAME_LIST = [
@@ -43,3 +50,4 @@ if __name__ == "__main__":
 
     # Data
     ohlcv_df = get_ohlcv(BASEDATE, ticker_list)
+    marketcap_df = get_marketcap(BASEDATE, ticker_list)
