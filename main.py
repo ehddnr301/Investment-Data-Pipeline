@@ -32,6 +32,28 @@ def get_marketcap(basedate, ticker_list):
     return df
 
 
+def get_net_purchase_by_investor(investor, basedate, ticker_list):
+    df = stock.get_market_net_purchases_of_equities(
+        basedate, basedate, "KOSPI", investor
+    )
+    df.drop(columns=["종목명"], inplace=True)
+    df = df.filter(items=ticker_list, axis=0)
+    df = df.add_prefix(f"{investor}_")
+    df = df.reset_index()
+    return df
+
+
+def get_net_purchases_by_investor(basedate, ticker_list, investor_list):
+    ticker_dict = {"티커": [tick for tick in ticker_list]}
+
+    df = pd.DataFrame(ticker_dict)
+    for investor in investor_list:
+        data = get_net_purchase_by_investor(investor, basedate, ticker_list)
+        df = pd.merge(left=df, right=data, how="left", on=["티커"])
+
+    return df
+
+
 if __name__ == "__main__":
     BASEDATE = str((datetime.today() + timedelta(hours=9)).date())
     TARGET_NAME_LIST = [
@@ -45,9 +67,13 @@ if __name__ == "__main__":
         "NAVER",
         "카카오",
     ]
+    INVESTOR_LIST = ["외국인", "금융투자", "투신", "개인"]
 
     ticker_list = convert_namelist_to_tickerlist(BASEDATE, TARGET_NAME_LIST)
 
     # Data
     ohlcv_df = get_ohlcv(BASEDATE, ticker_list)
     marketcap_df = get_marketcap(BASEDATE, ticker_list)
+    net_purchase_df = get_net_purchases_by_investor(
+        BASEDATE, ticker_list, INVESTOR_LIST
+    )
