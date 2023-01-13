@@ -17,6 +17,6 @@
     - [x] 투신(investment)
     - [x] 개인(individual)
 - [x] db 저장 (postgres)
-- [ ] Dockerfile형태 제작
-- [ ] docker-compose형태 제작
+- [x] Dockerfile형태 제작
+- [x] docker-compose형태 제작
 - [ ] crontab 설정
