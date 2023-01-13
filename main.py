@@ -1,7 +1,12 @@
+import os
 from datetime import datetime, timedelta
 
 import pandas as pd
 from pykrx import stock
+from sqlalchemy import create_engine
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def convert_namelist_to_tickerlist(basedate: str, target_name_list: list):
@@ -77,3 +82,18 @@ if __name__ == "__main__":
     net_purchase_df = get_net_purchases_by_investor(
         BASEDATE, ticker_list, INVESTOR_LIST
     )
+
+    final_df = pd.merge(
+        left=ohlcv_df,
+        right=marketcap_df,
+        how="left",
+        on=["티커"],
+        suffixes=("_ohlcv", "_marketcap"),
+    )
+    final_df = pd.merge(left=final_df, right=net_purchase_df, how="left", on=["티커"])
+
+    URL = os.getenv("POSTGRES_URL")
+    engine = create_engine(URL)
+
+    with engine.begin() as conn:
+        final_df.to_sql("ods_stock", con=conn, index=False)
