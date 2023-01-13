@@ -18,5 +18,5 @@
     - [x] 개인(individual)
 - [x] db 저장 (postgres)
 - [ ] Dockerfile형태 제작
-- [ ] crontab 설정
 - [ ] docker-compose형태 제작
+- [ ] crontab 설정
