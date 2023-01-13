@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+import pandas as pd
 from pykrx import stock
 
 
@@ -12,6 +13,16 @@ def convert_namelist_to_tickerlist(basedate: str, target_name_list: list):
     ]
 
     return ticker_list
+
+
+def get_ohlcv(basedate, ticker_list):
+    df = pd.DataFrame()
+    for tick in ticker_list:
+        data = stock.get_market_ohlcv(basedate, basedate, tick)
+        data = data.reset_index()
+        data.insert(1, "티커", tick)
+        df = pd.concat([df, data], ignore_index=True)
+    return df
 
 
 if __name__ == "__main__":
@@ -29,3 +40,6 @@ if __name__ == "__main__":
     ]
 
     ticker_list = convert_namelist_to_tickerlist(BASEDATE, TARGET_NAME_LIST)
+
+    # Data
+    ohlcv_df = get_ohlcv(BASEDATE, ticker_list)

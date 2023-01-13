@@ -10,7 +10,7 @@
 ## To-Do List (2023-01-13)
 
 - [ ] pykrx 테스트
-    - [ ] ohlcv
+    - [x] ohlcv
     - [ ] marketcap
     - [ ] 외국인(foreigner)
     - [ ] 금융투자(brokerage)
