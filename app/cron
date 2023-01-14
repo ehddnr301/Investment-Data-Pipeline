@@ -1,0 +1,1 @@
+0 9 * * 1,2,3,4,5 /usr/local/bin/python /home/main.py >> /var/log/cron.log 2>&1
