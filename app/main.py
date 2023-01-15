@@ -2,8 +2,6 @@
 
 from datetime import datetime, timedelta
 
-import pandas as pd
-
 from configs.config import Config
 from utils.pykrx_func import (
     convert_namelist_to_tickerlist,
@@ -11,28 +9,27 @@ from utils.pykrx_func import (
     get_marketcap,
     get_net_purchases_by_investor,
     insert_data_to_db,
+    execute_query,
 )
+from utils.queries import CREATE_STOCK_QUERY, INSERT_STOCK_QUERY
+
 
 if __name__ == "__main__":
     BASEDATE = str((datetime.today() + timedelta(hours=9)).date())
 
     # Extract Data
     ticker_list = convert_namelist_to_tickerlist(BASEDATE, Config.TARGET_NAME_LIST)
+
     ohlcv_df = get_ohlcv(BASEDATE, ticker_list)
     marketcap_df = get_marketcap(BASEDATE, ticker_list)
     net_purchase_df = get_net_purchases_by_investor(
         BASEDATE, ticker_list, Config.INVESTOR_LIST
     )
 
-    # Transform Data
-    final_df = pd.merge(
-        left=ohlcv_df,
-        right=marketcap_df,
-        how="left",
-        on=["티커"],
-        suffixes=("_ohlcv", "_marketcap"),
-    )
-    final_df = pd.merge(left=final_df, right=net_purchase_df, how="left", on=["티커"])
-
     # Load Data
-    insert_data_to_db(final_df, "ods_stock")
+    insert_data_to_db(ohlcv_df, "ods_ohlcv")
+    insert_data_to_db(marketcap_df, "ods_marketcap")
+    insert_data_to_db(net_purchase_df, "ods_netpurchase")
+
+    execute_query(CREATE_STOCK_QUERY)
+    execute_query(INSERT_STOCK_QUERY)

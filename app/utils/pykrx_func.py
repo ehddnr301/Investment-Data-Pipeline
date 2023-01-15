@@ -1,8 +1,10 @@
 import pandas as pd
 from pykrx import stock
 from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
 
 from configs.config import Config
+from utils.queries import CREATE_STOCK_QUERY, INSERT_STOCK_QUERY
 
 
 def convert_namelist_to_tickerlist(basedate: str, target_name_list: list):
@@ -62,3 +64,11 @@ def insert_data_to_db(df: pd.DataFrame, table_name: str):
 
     with engine.begin() as conn:
         df.to_sql(table_name, con=conn, if_exists="append", index=False)
+
+
+def execute_query(query):
+    engine = create_engine(Config.POSTGRES_URL)
+
+    session = Session(engine)
+    with session.begin():
+        session.execute(query)
