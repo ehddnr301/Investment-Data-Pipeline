@@ -7,6 +7,15 @@
 - docker-compose version 1.25.0
 - pre-commit: black
 
+## To-Do List (2023-01-15)
+
+- [ ] 각 데이터 Table로 Insert후 하나의 테이블로 합치는 형태
+- [ ] Insert Performance 향상
+- [ ] 중복데이터 처리 로직 추가
+- [ ] Prefect 로 스케줄 관리
+- [ ] Notification 추가
+- [ ] Postgres를 대체할 DB형태 고려
+
 ## To-Do List (2023-01-13)
 
 - [x] pykrx 테스트
