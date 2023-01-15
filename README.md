@@ -19,4 +19,4 @@
 - [x] db 저장 (postgres)
 - [x] Dockerfile형태 제작
 - [x] docker-compose형태 제작
-- [ ] crontab 설정
+- [x] crontab 설정
