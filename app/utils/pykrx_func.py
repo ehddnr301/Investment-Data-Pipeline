@@ -23,10 +23,11 @@ def get_ohlcv(basedate: str, ticker_list: list):
     return df
 
 
-def get_marketcap(basedate: str, ticker_list: list):
+def get_marketcap(basedate: str, ticker_list: list, drop_col_list: list):
     df = stock.get_market_cap(basedate)
     df = df.filter(items=ticker_list, axis=0)
     df = df.reset_index()
+    df = df.drop(columns=drop_col_list)
     return df
 
 

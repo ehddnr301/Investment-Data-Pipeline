@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 
 from datetime import datetime, timedelta
 
@@ -7,7 +7,12 @@ from pykrx import stock
 from sqlalchemy import create_engine
 
 from configs.config import Config
-from utils.pykrx_func import convert_namelist_to_tickerlist, get_ohlcv, get_marketcap, get_net_purchases_by_investor
+from utils.pykrx_func import (
+    convert_namelist_to_tickerlist,
+    get_ohlcv,
+    get_marketcap,
+    get_net_purchases_by_investor,
+)
 
 if __name__ == "__main__":
     BASEDATE = str((datetime.today() + timedelta(hours=9)).date())
@@ -15,7 +20,7 @@ if __name__ == "__main__":
     # Extract Data
     ticker_list = convert_namelist_to_tickerlist(BASEDATE, Config.TARGET_NAME_LIST)
     ohlcv_df = get_ohlcv(BASEDATE, ticker_list)
-    marketcap_df = get_marketcap(BASEDATE, ticker_list)
+    marketcap_df = get_marketcap(BASEDATE, ticker_list, Config.DROP_COLUMN_LIST)
     net_purchase_df = get_net_purchases_by_investor(
         BASEDATE, ticker_list, Config.INVESTOR_LIST
     )
@@ -26,7 +31,6 @@ if __name__ == "__main__":
         right=marketcap_df,
         how="left",
         on=["티커"],
-        suffixes=("_ohlcv", "_marketcap"),
     )
     final_df = pd.merge(left=final_df, right=net_purchase_df, how="left", on=["티커"])
 
