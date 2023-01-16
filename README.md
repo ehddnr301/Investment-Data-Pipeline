@@ -7,11 +7,14 @@
 - docker-compose version 1.25.0
 - pre-commit: black
 
+## To-Do List (2023-01-17)
+
+- [ ] Postgres를 대체할 DB형태 고려
+
 ## To-Do List (2023-01-16)
 
 - [ ] Prefect 로 스케줄 관리
 - [ ] Notification 추가
-- [ ] Postgres를 대체할 DB형태 고려
 
 ## To-Do List (2023-01-15)
 
