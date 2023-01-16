@@ -6,7 +6,11 @@ load_dotenv()
 
 
 class Config:
-    POSTGRES_URL: str = os.getenv("POSTGRES_URL")
+    POSTGRES_HOST: str = os.getenv("POSTGRES_HOST")
+    POSTGRES_USER: str = os.getenv("POSTGRES_USER")
+    POSTGRES_PASSWORD: str = os.getenv("POSTGRES_PASSWORD")
+    POSTGRES_PORT: int = os.getenv("POSTGRES_PORT")
+    POSTGRES_DATABASE: str = os.getenv("POSTGRES_DATABASE")
     TARGET_NAME_LIST: List[str] = [
         "삼성전자",
         "LG에너지솔루션",

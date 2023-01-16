@@ -12,6 +12,10 @@ from utils.pykrx_func import (
     get_ohlcv,
     get_marketcap,
     get_net_purchases_by_investor,
+    load_data,
+    create_db_connection,
+    check_table_exists,
+    initial_load_data,
 )
 
 if __name__ == "__main__":
@@ -34,8 +38,15 @@ if __name__ == "__main__":
     )
     final_df = pd.merge(left=final_df, right=net_purchase_df, how="left", on=["티커"])
 
-    # Load Data
-    engine = create_engine(Config.POSTGRES_URL)
+    # Create Connection
+    psycopg_conn = create_db_connection("psycopg")
+    sqlalchemy_engine = create_db_connection("sqlalchemy")
 
-    with engine.begin() as conn:
-        final_df.to_sql("ods_stock", con=conn, index=False)
+    # Check Table Exists
+    is_exists = check_table_exists(sqlalchemy_engine, "ods_stock")
+
+    # Load Data
+    if is_exists:
+        load_data(psycopg_conn, final_df, "ods_stock")
+    else:
+        initial_load_data(sqlalchemy_engine, final_df, "ods_stock")
