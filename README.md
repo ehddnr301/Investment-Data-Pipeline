@@ -7,13 +7,16 @@
 - docker-compose version 1.25.0
 - pre-commit: black
 
-## To-Do List (2023-01-15)
+## To-Do List (2023-01-16)
 
-- [x] 중복데이터 처리 로직 추가
-- [ ] Insert Performance 향상
 - [ ] Prefect 로 스케줄 관리
 - [ ] Notification 추가
 - [ ] Postgres를 대체할 DB형태 고려
+
+## To-Do List (2023-01-15)
+
+- [x] 중복데이터 처리 로직 추가
+- [x] Insert Performance 향상
 
 ## To-Do List (2023-01-13)
 
