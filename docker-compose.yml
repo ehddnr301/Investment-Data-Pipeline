@@ -13,7 +13,7 @@ services:
   job:
     depends_on:
       - db
-    image: ehddnr/investment-data-pipeline
+    image: ehddnr/investment-data-pipeline:1.0.0
     container_name: data-pipeline-job
 volumes:
   db_home:
