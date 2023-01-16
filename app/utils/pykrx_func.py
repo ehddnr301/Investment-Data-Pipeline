@@ -13,7 +13,7 @@ def convert_namelist_to_tickerlist(basedate: str, target_name_list: list):
     return ticker_list
 
 
-def get_ohlcv(basedate, ticker_list):
+def get_ohlcv(basedate: str, ticker_list: list):
     df = pd.DataFrame()
     for tick in ticker_list:
         data = stock.get_market_ohlcv(basedate, basedate, tick)
@@ -23,14 +23,14 @@ def get_ohlcv(basedate, ticker_list):
     return df
 
 
-def get_marketcap(basedate, ticker_list):
+def get_marketcap(basedate: str, ticker_list: list):
     df = stock.get_market_cap(basedate)
     df = df.filter(items=ticker_list, axis=0)
     df = df.reset_index()
     return df
 
 
-def get_net_purchase_by_investor(investor, basedate, ticker_list):
+def get_net_purchase_by_investor(investor: str, basedate: str, ticker_list: list):
     df = stock.get_market_net_purchases_of_equities(
         basedate, basedate, "KOSPI", investor
     )
@@ -41,7 +41,9 @@ def get_net_purchase_by_investor(investor, basedate, ticker_list):
     return df
 
 
-def get_net_purchases_by_investor(basedate, ticker_list, investor_list):
+def get_net_purchases_by_investor(
+    basedate: str, ticker_list: list, investor_list: list
+):
     ticker_dict = {"티커": [tick for tick in ticker_list]}
 
     df = pd.DataFrame(ticker_dict)
