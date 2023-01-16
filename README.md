@@ -9,7 +9,7 @@
 
 ## To-Do List (2023-01-15)
 
-- [ ] 중복데이터 처리 로직 추가
+- [x] 중복데이터 처리 로직 추가
 - [ ] Insert Performance 향상
 - [ ] Prefect 로 스케줄 관리
 - [ ] Notification 추가
