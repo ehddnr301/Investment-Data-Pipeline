@@ -1,7 +1,5 @@
-FROM ehddnr/investment-data-pipeline
+FROM ehddnr/investment-data-pipeline:2.0.0
 MAINTAINER ehddnr
-
-RUN apt-get update && apt-get install -y cron
 
 COPY . /home
 WORKDIR /home

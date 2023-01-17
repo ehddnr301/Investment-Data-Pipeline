@@ -9,11 +9,16 @@ services:
     ports:
       - "5432:5432"
     volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
       - db_home:/var/lib/postgresql/data
   job:
     depends_on:
       - db
-    image: ehddnr/investment-data-pipeline:1.0.0
+    ports:
+      - "4200:4200"
+    environment:
+      - PREFECT_ORION_API_HOST=127.0.0.1
+    image: ehddnr/investment-data-pipeline:2.0.0
     container_name: data-pipeline-job
 volumes:
   db_home:
