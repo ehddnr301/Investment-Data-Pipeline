@@ -1,16 +1,27 @@
 import pandas as pd
 from pykrx import stock
-from prefect import flow, task, get_run_logger
+from prefect import flow, task
 from prefect.task_runners import ConcurrentTaskRunner
 
-from utils.pykrx_func import (
-    filter_ticker,
-    get_net_purchase_by_investor,
-    create_db_connection,
-    check_table_exists,
-    load_data,
-    initial_load_data,
-)
+
+def filter_ticker(ticker_list: list, name_list: list):
+    ticker_list = [
+        ticker
+        for ticker in ticker_list
+        if stock.get_market_ticker_name(ticker) in name_list
+    ]
+    return ticker_list
+
+
+def get_net_purchase_by_investor(investor: str, basedate: str, ticker_list: list):
+    df = stock.get_market_net_purchases_of_equities(
+        basedate, basedate, "KOSPI", investor
+    )
+    df = df.filter(items=ticker_list, axis=0)
+    df = df.add_prefix(f"{investor}_")
+    df = df.reset_index()
+
+    return df
 
 
 @task(name="convert_name_to_ticker")
@@ -68,32 +79,3 @@ def extract(
     )
 
     return ohlcv_df, marketcap_df, netpurchase_df
-
-
-@task(name="KrxStock_Transform")
-def transform(ohlcv_df, marketcap_df, netpurchase_df):
-    stock_df = pd.merge(
-        left=ohlcv_df,
-        right=marketcap_df,
-        how="left",
-        on=["티커"],
-    )
-    stock_df = pd.merge(left=stock_df, right=netpurchase_df, how="left", on=["티커"])
-
-    return stock_df
-
-
-@task(name="KrxStock_Load")
-def load(df, table_name):
-    # Create Connection
-    psycopg_conn = create_db_connection("psycopg")
-    sqlalchemy_engine = create_db_connection("sqlalchemy")
-
-    # Check Table Exists
-    is_exists = check_table_exists(sqlalchemy_engine, table_name)
-
-    # Load Data
-    if is_exists:
-        load_data(psycopg_conn, df, table_name)
-    else:
-        initial_load_data(sqlalchemy_engine, df, table_name)
