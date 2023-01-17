@@ -17,6 +17,7 @@ def get_net_purchase_by_investor(investor: str, basedate: str, ticker_list: list
     df = stock.get_market_net_purchases_of_equities(
         basedate, basedate, "KOSPI", investor
     )
+    df.drop(columns=["종목명"], inplace=True)
     df = df.filter(items=ticker_list, axis=0)
     df = df.add_prefix(f"{investor}_")
     df = df.reset_index()
