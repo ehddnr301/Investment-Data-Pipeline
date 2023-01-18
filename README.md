@@ -7,10 +7,13 @@
 - docker-compose version 1.25.0
 - pre-commit: black
 
+
+## To-Do List (2023-01-19)
+
+- [ ] Postgres를 대체할 DB형태 고려
 ## To-Do List (2023-01-18)
 
-- [ ] Notification 추가
-- [ ] Postgres를 대체할 DB형태 고려
+- [x] Notification 추가
 
 ## To-Do List (2023-01-17)
 
