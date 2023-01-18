@@ -4,3 +4,4 @@ matplotlib==3.6.3
 SQLAlchemy==1.4.46
 psycopg2-binary==2.9.5
 python-dotenv==0.21.0
+prefect==2.6.8
