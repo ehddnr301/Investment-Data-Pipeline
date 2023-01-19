@@ -7,6 +7,20 @@ from sqlalchemy.engine.base import Engine
 from configs.config import Config
 
 
+def load_data_to_bigquery(
+    df: pd.DataFrame,
+    bigquery_project_id: str,
+    dataset_name: str,
+    table_name: str,
+    if_exists: str = "append",
+):
+    df.to_gbq(
+        destination_table=f"{dataset_name}.{dataset_name}",
+        project_id=bigquery_project_id,
+        if_exists=if_exists,
+    )
+
+
 def initial_load_data(engine: Engine, df: pd.DataFrame, table_name: str):
     with engine.begin() as conn:
         df.to_sql(table_name, con=conn, index=False)
