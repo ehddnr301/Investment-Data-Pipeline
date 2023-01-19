@@ -10,6 +10,7 @@ from utils import extract_pykrx, transform_pykrx, load_pykrx
 @flow(name="KrxStock_ETL")
 def stock_data_etl(basedate: str = None):
     basedate = basedate or str((datetime.today() + timedelta(hours=9)).date())
+
     ohlcv_df, marketcap_df, netpurchase_df = extract_pykrx(
         basedate,
         Config.TARGET_NAME_LIST,
@@ -17,7 +18,7 @@ def stock_data_etl(basedate: str = None):
         Config.INVESTOR_LIST,
     )
     df = transform_pykrx(ohlcv_df, marketcap_df, netpurchase_df)
-    load_pykrx(df, "ods_stock")
+    load_pykrx(df, Config.BIGQUEY_PROJECT_ID, Config.BIGQUEY_DATASET_NAME, "ods_stock")
 
 
 if __name__ == "__main__":

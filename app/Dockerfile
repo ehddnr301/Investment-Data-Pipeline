@@ -1,4 +1,4 @@
-FROM ehddnr/investment-data-pipeline:2.0.0
+FROM ehddnr/investment-data-pipeline:3.0.0
 MAINTAINER ehddnr
 
 COPY . /home
