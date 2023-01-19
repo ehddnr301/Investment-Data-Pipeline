@@ -15,7 +15,7 @@ def load_data_to_bigquery(
     if_exists: str = "append",
 ):
     df.to_gbq(
-        destination_table=f"{dataset_name}.{dataset_name}",
+        destination_table=f"{dataset_name}.{table_name}",
         project_id=bigquery_project_id,
         if_exists=if_exists,
     )
