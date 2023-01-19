@@ -10,7 +10,7 @@
 
 ## To-Do List (2023-01-19)
 
-- [ ] Postgres를 대체할 DB형태 고려
+- [x] Postgres를 대체할 DB형태 고려
 ## To-Do List (2023-01-18)
 
 - [x] Notification 추가
