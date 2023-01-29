@@ -11,6 +11,15 @@
 
 - [x] google-colud-function을 이용한 추가
     - `gcloud functions deploy stock_data_etl2 --runtime python38 --trigger-http --memory=1024MB`
+    ```bash
+    gcloud scheduler jobs create http my_job \
+   --location us-central1 \
+   --schedule "30 18 * * *" \
+   --time-zone "Asia/Seoul" \
+   --uri "{YOUR CLOUD FUNCTION API URI}" \
+   --http-method POST \
+   --oidc-service-account-email {YOUR SERVICE ACCOUNT}
+    ```
 
 
 ## To-Do List (2023-01-19)

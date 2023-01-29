@@ -21,9 +21,11 @@ def try_catch_log(wrapped_func):
 
 @try_catch_log
 def stock_data_etl2(request=None):
-    basedate = request.get_json().get("basedate") or str(
-        (datetime.today() + timedelta(hours=9)).date()
-    )
+
+    try:
+        basedate = request.get_json().get("basedate")
+    except:
+        basedate = str((datetime.today() + timedelta(hours=9)).date())
 
     ohlcv_df, marketcap_df, netpurchase_df = extract_pykrx(
         basedate,
