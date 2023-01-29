@@ -1,7 +1,5 @@
 import pandas as pd
 from pykrx import stock
-from prefect import flow, task
-from prefect.task_runners import ConcurrentTaskRunner
 
 
 def filter_ticker(ticker_list: list, name_list: list):
@@ -25,14 +23,12 @@ def get_net_purchase_by_investor(investor: str, basedate: str, ticker_list: list
     return df
 
 
-@task(name="convert_name_to_ticker")
 def get_ticker_list(basedate: str, target_name_list: list):
     ticker_list = stock.get_market_ticker_list(basedate)
     res = filter_ticker(ticker_list, target_name_list)
     return res
 
 
-@task(name="get_ohlcv")
 def get_ohlcv(basedate: str, ticker_list: list):
     temp = []
     for tick in ticker_list:
@@ -44,7 +40,6 @@ def get_ohlcv(basedate: str, ticker_list: list):
     return df
 
 
-@task(name="get_marketcap")
 def get_marketcap(basedate: str, ticker_list: list, drop_col_list: list):
     df = stock.get_market_cap(basedate)
     df = df.filter(items=ticker_list, axis=0)
@@ -54,7 +49,6 @@ def get_marketcap(basedate: str, ticker_list: list, drop_col_list: list):
     return df
 
 
-@task(name="get_net_purchases_by_investor")
 def get_net_purchases_by_investor(
     basedate: str, ticker_list: list, investor_list: list
 ):
@@ -68,15 +62,12 @@ def get_net_purchases_by_investor(
     return df
 
 
-@flow(name="KrxStock_Extract", task_runner=ConcurrentTaskRunner)
 def extract(
     basedate: str, target_name_list: list, drop_col_list: list, investor_list: list
 ):
     ticker_list = get_ticker_list(basedate, target_name_list)
-    ohlcv_df = get_ohlcv.submit(basedate, ticker_list)
-    marketcap_df = get_marketcap.submit(basedate, ticker_list, drop_col_list)
-    netpurchase_df = get_net_purchases_by_investor.submit(
-        basedate, ticker_list, investor_list
-    )
+    ohlcv_df = get_ohlcv(basedate, ticker_list)
+    marketcap_df = get_marketcap(basedate, ticker_list, drop_col_list)
+    netpurchase_df = get_net_purchases_by_investor(basedate, ticker_list, investor_list)
 
     return ohlcv_df, marketcap_df, netpurchase_df

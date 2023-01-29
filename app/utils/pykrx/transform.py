@@ -1,10 +1,8 @@
 import pandas as pd
-from prefect import task
 
 from configs.config import Config
 
 
-@task(name="KrxStock_Transform")
 def transform(ohlcv_df, marketcap_df, netpurchase_df):
     stock_df = pd.merge(
         left=ohlcv_df,

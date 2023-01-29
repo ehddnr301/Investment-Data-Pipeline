@@ -7,6 +7,11 @@
 - docker-compose version 1.25.0
 - pre-commit: black
 
+## Appendix
+
+- [x] google-colud-function을 이용한 추가
+    - `gcloud functions deploy stock_data_etl2 --runtime python38 --trigger-http --memory=1024MB`
+
 
 ## To-Do List (2023-01-19)
 

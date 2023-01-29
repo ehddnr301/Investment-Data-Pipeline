@@ -1,15 +1,29 @@
-import argparse
 from datetime import datetime, timedelta
-
-from prefect import flow
 
 from configs.config import Config
 from utils import extract_pykrx, transform_pykrx, load_pykrx
+import logging
+import traceback
 
 
-@flow(name="KrxStock_ETL")
-def stock_data_etl(basedate: str = None):
-    basedate = basedate or str((datetime.today() + timedelta(hours=9)).date())
+def try_catch_log(wrapped_func):
+    def wrapper(*args, **kwargs):
+        try:
+            response = wrapped_func(*args, **kwargs)
+        except Exception:
+            error_message = traceback.format_exc().replace("\n", "  ")
+            logging.error(error_message)
+            return "Error"
+        return response
+
+    return wrapper
+
+
+@try_catch_log
+def stock_data_etl2(request=None):
+    basedate = request.get_json().get("basedate") or str(
+        (datetime.today() + timedelta(hours=9)).date()
+    )
 
     ohlcv_df, marketcap_df, netpurchase_df = extract_pykrx(
         basedate,
@@ -18,15 +32,7 @@ def stock_data_etl(basedate: str = None):
         Config.INVESTOR_LIST,
     )
     df = transform_pykrx(ohlcv_df, marketcap_df, netpurchase_df)
-    load_pykrx(df, Config.BIGQUEY_PROJECT_ID, Config.BIGQUEY_DATASET_NAME, "ods_stock")
+    print(df.shape)
+    load_pykrx(df, Config.BIGQUEY_PROJECT_ID, Config.BIGQUEY_DATASET_NAME, "t_stock")
 
-
-if __name__ == "__main__":
-
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument("--date")
-    args = parser.parse_args()
-    basedate = args.date or str((datetime.today() + timedelta(hours=9)).date())
-
-    stock_data_etl(basedate)
+    return "Done"
